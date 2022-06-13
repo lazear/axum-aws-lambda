@@ -1,4 +1,3 @@
-# FROM alpine:latest
 FROM debian:latest
 
 ADD "https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie" /var/runtime/rie
@@ -14,5 +13,5 @@ ENV AWS_LAMBDA_RUNTIME_API="localhost:9000"
 ENV AWS_DEFAULT_REGION="us-west-2"
 ENV RUST_BACKTRACE="1"
 
-COPY "target/debug/axum-lambda" "/var/runtime/bootstrap"
+COPY "target/release/examples/main" "/var/runtime/bootstrap"
 CMD ["/var/runtime/rie", "/var/runtime/bootstrap"]
