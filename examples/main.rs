@@ -88,7 +88,7 @@ async fn main() {
     {
         // To run with AWS Lambda runtime, wrap in our `LambdaLayer`
         let app = tower::ServiceBuilder::new()
-            .layer(axum_lambda::LambdaLayer::default())
+            .layer(axum_aws_lambda::LambdaLayer::default())
             .service(app);
 
         lambda_http::run(app).await.unwrap();
