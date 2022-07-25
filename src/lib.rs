@@ -1,21 +1,36 @@
 use axum::response::IntoResponse;
+use http::Uri;
+use lambda_http::RequestExt;
 use std::{future::Future, pin::Pin};
 use tower::Layer;
 use tower_service::Service;
 
 #[derive(Default, Clone, Copy)]
-pub struct LambdaLayer;
+pub struct LambdaLayer {
+    trim_stage: bool,
+}
+
+impl LambdaLayer {
+    pub fn trim_stage(mut self) -> Self {
+        self.trim_stage = true;
+        self
+    }
+}
 
 impl<S> Layer<S> for LambdaLayer {
     type Service = LambdaService<S>;
 
     fn layer(&self, inner: S) -> Self::Service {
-        LambdaService { inner }
+        LambdaService {
+            inner,
+            layer: self.clone(),
+        }
     }
 }
 
 pub struct LambdaService<S> {
     inner: S,
+    layer: LambdaLayer,
 }
 
 impl<S> Service<lambda_http::Request> for LambdaService<S>
@@ -38,12 +53,33 @@ where
     }
 
     fn call(&mut self, req: lambda_http::Request) -> Self::Future {
-        let (parts, body) = req.into_parts();
+        let uri = req.uri().clone();
+        let rawpath = req.raw_http_path();
+        let (mut parts, body) = req.into_parts();
         let body = match body {
             lambda_http::Body::Empty => axum::body::Body::default(),
             lambda_http::Body::Text(t) => t.into(),
             lambda_http::Body::Binary(v) => v.into(),
         };
+
+        if self.layer.trim_stage {
+            let mut url = match uri.host() {
+                None => rawpath,
+                Some(host) => format!(
+                    "{}://{}{}",
+                    uri.scheme_str().unwrap_or("https"),
+                    host,
+                    rawpath
+                ),
+            };
+
+            if let Some(query) = uri.query() {
+                url.push('?');
+                url.push_str(&query);
+            }
+            parts.uri = url.parse::<Uri>().unwrap();
+        }
+
         let request = axum::http::Request::from_parts(parts, body);
 
         let fut = self.inner.call(request);
