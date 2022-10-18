@@ -23,7 +23,7 @@ impl<S> Layer<S> for LambdaLayer {
     fn layer(&self, inner: S) -> Self::Service {
         LambdaService {
             inner,
-            layer: self.clone(),
+            layer: *self,
         }
     }
 }
@@ -75,7 +75,7 @@ where
 
             if let Some(query) = uri.query() {
                 url.push('?');
-                url.push_str(&query);
+                url.push_str(query);
             }
             parts.uri = url.parse::<Uri>().unwrap();
         }
