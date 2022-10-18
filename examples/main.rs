@@ -54,7 +54,6 @@ async fn main() {
 
     // Set up CORS
     let cors_layer = CorsLayer::new()
-        .allow_credentials(true)
         .allow_headers(vec![
             ACCEPT,
             ACCEPT_ENCODING,
