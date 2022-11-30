@@ -13,7 +13,7 @@ keywords = ["axum", "lambda", "tower", "aws"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = "0.5"
+axum = "0.6"
 lambda_http = "0.7"
 hyper = "0.14"
 bytes = "1"

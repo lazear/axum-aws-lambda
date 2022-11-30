@@ -22,8 +22,8 @@ struct Data {
 }
 
 async fn post_data(
-    Json(payload): Json<Data>,
     Extension(state): Extension<Arc<Mutex<State>>>,
+    Json(payload): Json<Data>,
 ) -> impl IntoResponse {
     let mut state = state.lock().unwrap();
     state.data.push(payload);
