@@ -1,6 +1,6 @@
 [package]
 name = "axum-aws-lambda"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 authors = ["Michael Lazear"]
 description = "Tower Layer for compatibility between Axum and AWS Lambda Runtime"

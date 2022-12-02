@@ -1,5 +1,5 @@
+use axum::extract::State;
 use axum::response::IntoResponse;
-use axum::Extension;
 use axum::{
     routing::{get, post},
     Json, Router,
@@ -12,7 +12,7 @@ use std::sync::{Arc, Mutex};
 use tower_http::{compression::CompressionLayer, cors::CorsLayer, trace::TraceLayer};
 
 #[derive(Default)]
-struct State {
+struct AppState {
     data: Vec<Data>,
 }
 
@@ -22,7 +22,7 @@ struct Data {
 }
 
 async fn post_data(
-    Extension(state): Extension<Arc<Mutex<State>>>,
+    State(state): State<Arc<Mutex<AppState>>>,
     Json(payload): Json<Data>,
 ) -> impl IntoResponse {
     let mut state = state.lock().unwrap();
@@ -30,7 +30,7 @@ async fn post_data(
     StatusCode::CREATED
 }
 
-async fn get_data(Extension(state): Extension<Arc<Mutex<State>>>) -> impl IntoResponse {
+async fn get_data(State(state): State<Arc<Mutex<AppState>>>) -> impl IntoResponse {
     let state = state.lock().unwrap();
     (StatusCode::OK, Json(state.data.clone()))
 }
@@ -44,7 +44,7 @@ async fn main() {
         .json()
         .init();
 
-    let state = Arc::new(Mutex::new(State::default()));
+    let state = Arc::new(Mutex::new(AppState::default()));
 
     // Trace every request
     let trace_layer =
@@ -68,10 +68,10 @@ async fn main() {
     let app = Router::new()
         .route("/", post(post_data))
         .route("/", get(get_data))
-        .layer(Extension(state))
         .layer(cors_layer)
         .layer(trace_layer)
-        .layer(CompressionLayer::new().gzip(true).deflate(true));
+        .layer(CompressionLayer::new().gzip(true).deflate(true))
+        .with_state(state);
 
     #[cfg(debug_assertions)]
     {
