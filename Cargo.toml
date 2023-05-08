@@ -14,7 +14,7 @@ keywords = ["axum", "lambda", "tower", "aws"]
 
 [dependencies]
 axum = "0.6"
-lambda_http = "0.7"
+lambda_http = "0.8"
 hyper = "0.14"
 bytes = "1"
 http = "0.2"
@@ -23,7 +23,7 @@ tower-service = "0.3"
 
 [dev-dependencies]
 tokio = { version = "1.0", features = ["rt"] }
-tower-http = { version = "0.3", features = ["cors", "compression-gzip", "compression-deflate", "trace"] }
+tower-http = { version = "0.4", features = ["cors", "compression-gzip", "compression-deflate", "trace"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }

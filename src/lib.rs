@@ -54,7 +54,7 @@ where
 
     fn call(&mut self, req: lambda_http::Request) -> Self::Future {
         let uri = req.uri().clone();
-        let rawpath = req.raw_http_path();
+        let rawpath = req.raw_http_path().to_owned();
         let (mut parts, body) = req.into_parts();
         let body = match body {
             lambda_http::Body::Empty => axum::body::Body::default(),
