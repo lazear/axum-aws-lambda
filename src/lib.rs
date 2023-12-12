@@ -1,5 +1,4 @@
 use axum::response::IntoResponse;
-use http::Uri;
 use lambda_http::RequestExt;
 use std::{future::Future, pin::Pin};
 use tower::Layer;
@@ -77,7 +76,7 @@ where
                 url.push('?');
                 url.push_str(query);
             }
-            parts.uri = url.parse::<Uri>().unwrap();
+            parts.uri = url.parse::<hyper::Uri>().unwrap();
         }
 
         let request = axum::http::Request::from_parts(parts, body);
