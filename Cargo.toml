@@ -7,7 +7,7 @@ description = "Tower Layer for compatibility between Axum and AWS Lambda Runtime
 readme = "README.md"
 homepage = "https://github.com/lazear/axum-aws-lambda"
 repository = "https://github.com/lazear/axum-aws-lambda"
-license ="MIT"
+license = "MIT"
 keywords = ["axum", "lambda", "tower", "aws"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -16,14 +16,19 @@ keywords = ["axum", "lambda", "tower", "aws"]
 axum = "0.6"
 lambda_http = "0.8"
 hyper = "0.14"
-bytes = "1"
-http = "0.2"
+bytes = "1.5"
+http = "1"
 tower = "0.4"
 tower-service = "0.3"
 
 [dev-dependencies]
 tokio = { version = "1.0", features = ["rt"] }
-tower-http = { version = "0.4", features = ["cors", "compression-gzip", "compression-deflate", "trace"] }
+tower-http = { version = "0.4", features = [
+    "cors",
+    "compression-gzip",
+    "compression-deflate",
+    "trace",
+] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
