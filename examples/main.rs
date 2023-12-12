@@ -1,11 +1,11 @@
 use axum::extract::State;
+use axum::http::header::{ACCEPT, ACCEPT_ENCODING, AUTHORIZATION, CONTENT_TYPE, ORIGIN};
 use axum::response::IntoResponse;
 use axum::{
     routing::{get, post},
     Json, Router,
 };
-use http::header::{ACCEPT, ACCEPT_ENCODING, AUTHORIZATION, CONTENT_TYPE, ORIGIN};
-use http::Request;
+use hyper::Request;
 use hyper::{Body, StatusCode};
 use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
@@ -54,13 +54,7 @@ async fn main() {
 
     // Set up CORS
     let cors_layer = CorsLayer::new()
-        .allow_headers(vec![
-            ACCEPT,
-            ACCEPT_ENCODING,
-            AUTHORIZATION,
-            CONTENT_TYPE,
-            ORIGIN,
-        ])
+        .allow_headers([ACCEPT, ACCEPT_ENCODING, AUTHORIZATION, CONTENT_TYPE, ORIGIN])
         .allow_methods(tower_http::cors::Any)
         .allow_origin(tower_http::cors::Any);
 
