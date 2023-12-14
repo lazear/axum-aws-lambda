@@ -13,17 +13,19 @@ keywords = ["axum", "lambda", "tower", "aws"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = "0.6"
-lambda_http = "0.8"
-hyper = "0.14"
+axum = "0.7.2"
+lambda_http = "0.9.0"
+hyper = "1.0.1"
 bytes = "1.5"
 http = "1"
 tower = "0.4"
 tower-service = "0.3"
+futures-util = "0.3.29"
+http-body-util = "0.1.0"
 
 [dev-dependencies]
 tokio = { version = "1.0", features = ["rt"] }
-tower-http = { version = "0.4", features = [
+tower-http = { version = "0.5.0", features = [
     "cors",
     "compression-gzip",
     "compression-deflate",

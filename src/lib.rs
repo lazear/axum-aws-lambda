@@ -1,4 +1,5 @@
 use axum::response::IntoResponse;
+use http_body_util::BodyExt;
 use lambda_http::RequestExt;
 use std::{future::Future, pin::Pin};
 use tower::Layer;
@@ -85,7 +86,7 @@ where
         let fut = async move {
             let resp = fut.await?;
             let (parts, body) = resp.into_response().into_parts();
-            let bytes = hyper::body::to_bytes(body).await?;
+            let bytes = body.into_data_stream().collect().await?.to_bytes();
             let bytes: &[u8] = &bytes;
             let resp: hyper::Response<lambda_http::Body> = match std::str::from_utf8(bytes) {
                 Ok(s) => hyper::Response::from_parts(parts, s.into()),
