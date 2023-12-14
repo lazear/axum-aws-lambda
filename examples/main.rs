@@ -1,3 +1,4 @@
+use axum::body::Body;
 use axum::extract::State;
 use axum::http::header::{ACCEPT, ACCEPT_ENCODING, AUTHORIZATION, CONTENT_TYPE, ORIGIN};
 use axum::response::IntoResponse;
@@ -6,7 +7,7 @@ use axum::{
     Json, Router,
 };
 use hyper::Request;
-use hyper::{Body, StatusCode};
+use hyper::StatusCode;
 use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
 use tower_http::{compression::CompressionLayer, cors::CorsLayer, trace::TraceLayer};
@@ -70,10 +71,8 @@ async fn main() {
     #[cfg(debug_assertions)]
     {
         let addr = std::net::SocketAddr::from(([127, 0, 0, 1], 3000));
-        axum::Server::bind(&addr)
-            .serve(app.into_make_service())
-            .await
-            .unwrap();
+        let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+        axum::serve(listener, app).await.unwrap();
     }
 
     // If we compile in release mode, use the Lambda Runtime
