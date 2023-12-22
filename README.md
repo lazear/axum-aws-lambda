@@ -11,7 +11,7 @@ Check out `examples/main.rs`: running in debug mode runs a hyper server, and bui
 
 I have also provided an example Dockerfile & python script for locally spinning up a lambda runtime:
 ```
-cargo build --release
+cargo build --release --example main
 docker build . -t lambda-test
 docker run -p 9000:8080 lambda-test
 python test_lambda_runtime
