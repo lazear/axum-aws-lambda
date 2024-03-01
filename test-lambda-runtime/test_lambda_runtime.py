@@ -4,23 +4,21 @@ import requests
 
 def mk_request(method="GET", body=None):
     return {
-        "body": json.dumps(body) if body else "",
         "headers": {
             "Accept": "*/*",
             "Content-Type": "application/json",
             "Host": "localhost:5000",
-            "User-Agent": "insomnia/2022.2.1",
+            "User-Agent": "insomnia/2022.2.1"
         },
-        "httpMethod": method,
-        "isBase64Encoded": False,
-        "multiValueHeaders": {
-            "Accept": "*/*",
-            "Content-Type": "application/json",
-            "Host": "localhost:5000",
-            "User-Agent": "insomnia/2022.2.1",
-        },
-        "path": "/",
         "queryStringParameters": {},
+        "requestContext": {
+            "http": {
+                "method": method,
+                "path": "/",
+            }
+        },
+        "body": json.dumps(body) if body else "",
+        "isBase64Encoded": False
     }
 
 
