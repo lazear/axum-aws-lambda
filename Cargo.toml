@@ -14,7 +14,7 @@ keywords = ["axum", "lambda", "tower", "aws"]
 
 [dependencies]
 axum = "0.7"
-lambda_http = "0"
+lambda_http = "0.13"
 hyper = "1.0"
 bytes = "1.5"
 http = "1"
