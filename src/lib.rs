@@ -60,6 +60,8 @@ where
             lambda_http::Body::Empty => axum::body::Body::default(),
             lambda_http::Body::Text(t) => t.into(),
             lambda_http::Body::Binary(v) => v.into(),
+            // lambda_http::Body is non-exhaustive, so a catch-all is needed
+            _ => unimplemented!("unsupported body type"),
         };
 
         if self.layer.trim_stage {
